@@ -5,6 +5,7 @@ const { getProfile } = require('./middleware/getProfile');
 const { getContractByIdForProfile } = require('./endpoints/getContractByIdForProfile');
 const { getContractsForProfile } = require('./endpoints/getContractsForProfile');
 const { getUnpaidJobs } = require('./endpoints/getUnpaidJobs');
+const { payForJob } = require('./endpoints/payForJob');
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.get('/contracts/:id', getProfile, getContractByIdForProfile)
 app.get('/contracts', getProfile, getContractsForProfile)
 
 app.get('/jobs/unpaid', getProfile, getUnpaidJobs);
+
+app.post('/jobs/:job_id/pay', getProfile, payForJob);
 
 module.exports = app;

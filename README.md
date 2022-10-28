@@ -13,6 +13,7 @@ https://www.getpostman.com/collections/9ecdd12782c7c981c9bf
 4. introduce typescript to project to use the types.
 5. introduce generic response and error types to have a better and structured response and errors instead of simply returning plain text messages.
 
+-- Kadir Akdeniz
 
 # DE-EL BACKEND TASK
 

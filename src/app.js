@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { sequelize } = require('./model')
 const { getProfile } = require('./middleware/getProfile');
 const { getContractByIdForProfile } = require('./endpoints/getContractByIdForProfile');
+const { getContractsForProfile } = require('./endpoints/getContractsForProfile');
 
 const app = express();
 
@@ -15,5 +16,7 @@ app.set('models', sequelize.models)
  * @returns contract by id
  */
 app.get('/contracts/:id', getProfile, getContractByIdForProfile)
+
+app.get('/contracts', getProfile, getContractsForProfile)
 
 module.exports = app;

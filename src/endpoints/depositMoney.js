@@ -1,4 +1,5 @@
 const { sequelize } = require("../model");
+const { Op } = require('sequelize');
 
 /* 
   request sample for http post payload
@@ -10,7 +11,7 @@ const depositMoneyRequest = {
 */
 
 const depositMoney = async (req, res, next) => {
-  const { Profile } = req.app.get('models');
+  const { Profile, Job, Contract } = req.app.get('models');
 
   const { userId } = req.params;
 
@@ -21,6 +22,20 @@ const depositMoney = async (req, res, next) => {
   const { profile } = req;
 
   if (+userId !== +profile.id) return res.status(401).send('You can only deposit money to your own account'); //weird setup but ok. Check my comment on app.js endpoint declaration.
+
+  const query = profile.type === 'client' ? { ClientId: profile.id } : { ContractorId: profile.id };
+  const contracts = await Contract.findAll({ where: query });
+
+  const contractIdList = contracts.map(contract => contract.id);
+  const notPaidCondition = { [Op.or]: { [Op.is]: null, [Op.not]: true } };
+  const jobsPendingPayment = await Job.findAll({ where: { ContractId: { [Op.or]: contractIdList }, paid: notPaidCondition }, raw: true })
+
+  const paymentsTotal = jobsPendingPayment.map(job => job.price).reduce((first, second) => first + second, 0);
+
+  const maxDepositLimit = paymentsTotal * 0.25;
+
+  if (amount > maxDepositLimit)
+    return res.status(404).send(`You can only deposit up to 25 % of the total price of jobs that are pending payment. The specified amount (${amount}) is higher than ${maxDepositLimit} which is 25 % of ${paymentsTotal} (total amount of pending payments). Please specify an amount equal to or less than ${maxDepositLimit}`);
 
   try {
     await sequelize.transaction(async (t) => {

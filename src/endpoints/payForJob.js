@@ -8,11 +8,11 @@ const payForJob = async (req, res, next) => {
   const job = await Job.findOne({ where: { id } });
   if (!job) return res.status(404).send("Job not found");
 
-  const contract = await Contract.findOne({ where: { id: job.ContractId }});
+  const contract = await Contract.findOne({ where: { id: job.ContractId } });
 
-  const contractor = await Profile.findOne({ where: { id: contract.ContractorId }});
+  const contractor = await Profile.findOne({ where: { id: contract.ContractorId } });
 
-  if(profile.id !== contract.ClientId) return res.status(401).send('You are not authorized to pay for this job');
+  if (profile.id !== contract.ClientId) return res.status(401).send('You are not authorized to pay for this job');
 
   if (job.paid) return res.status(404).send("Payment for this job has already been made.");
 
@@ -38,12 +38,12 @@ const payForJob = async (req, res, next) => {
       return updated_job;
     });
 
-    console.warn("paid_job", paid_job);
+    console.debug("paid_job", paid_job);
 
     return res.status(200).send(`Payment has been successfully made for job: ${paid_job.id}.`);
   }
   catch (error) {
-    console.warn("error", error);
+    console.debug("error", error);
     return res.status(500).send("an unexpected error happened, please try again later.");
   }
 }

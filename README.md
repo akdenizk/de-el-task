@@ -1,3 +1,19 @@
+# Task Completed by Kadir Akdeniz @ 2022-10-28
+
+Postman collection that includes http calls to test the API endpoints:
+https://www.getpostman.com/collections/9ecdd12782c7c981c9bf
+
+- You can import this on a postman collection and use the queries right away after running the backend.
+
+## Possible improvements / Roadmap
+
+1. introduce unit tests on endpoints to test http responses for both successes and failures
+2. move business logic from endpoints to services/stores to decouple that from endpoints. Endpoints should only handle the http interaction.
+3. introduce unit tests on services/stores to directly test the business logic
+4. introduce typescript to project to use the types.
+5. introduce generic response and error types to have a better and structured response and errors instead of simply returning plain text messages.
+
+
 # DE-EL BACKEND TASK
 
   

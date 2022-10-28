@@ -7,6 +7,7 @@ const { getContractsForProfile } = require('./endpoints/getContractsForProfile')
 const { getUnpaidJobs } = require('./endpoints/getUnpaidJobs');
 const { payForJob } = require('./endpoints/payForJob');
 const { depositMoney } = require('./endpoints/depositMoney');
+const { getBestProfession } = require('./endpoints/getBestProfession');
 
 const app = express();
 
@@ -30,5 +31,7 @@ app.post('/jobs/:job_id/pay', getProfile, payForJob);
 // if there were multiple balances, a balance id could be used as a path parameter such as /balances/deposit/:balanceId or account id such as /balances/deposit/:accountId
 // but I'll leave it as it is since it is requested this way and someone else might have thought something for the future or could be aware of some other requirements that are not written here.
 app.post('/balances/deposit/:userId', getProfile, depositMoney)
+
+app.get('/admin/best-profession', getBestProfession);
 
 module.exports = app;

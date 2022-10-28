@@ -1,4 +1,4 @@
-const { Op, json } = require("sequelize");
+const { Op } = require("sequelize");
 
 const getBestProfession = async (req, res, next) => {
   const { Job, Contract, Profile } = req.app.get('models');
@@ -17,11 +17,8 @@ const getBestProfession = async (req, res, next) => {
 
   const contractIdList = paidJobsWithinDates.map(job => job.ContractId);
 
-  // const jobsByContractId = Object.assign({}, ...paidJobsWithinDates.map(job => ({ [job.ContractId]: job })));
-
   const contracts = await Contract.findAll({ where: { id: contractIdList } });
 
-  // const contractsByContractorId = Object.assign({}, ...contracts.map(contract => ({ [contract.ContractorId]: contract })));
   const contractsByContractId = Object.assign({}, ...contracts.map(contract => ({ [contract.id]: contract })));
 
   const contractorIdList = contracts.map(contract => contract.ContractorId);

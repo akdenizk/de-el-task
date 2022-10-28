@@ -8,6 +8,7 @@ const { getUnpaidJobs } = require('./endpoints/getUnpaidJobs');
 const { payForJob } = require('./endpoints/payForJob');
 const { depositMoney } = require('./endpoints/depositMoney');
 const { getBestProfession } = require('./endpoints/getBestProfession');
+const { getBestClients } = require('./endpoints/getBestClients');
 
 const app = express();
 
@@ -33,5 +34,7 @@ app.post('/jobs/:job_id/pay', getProfile, payForJob);
 app.post('/balances/deposit/:userId', getProfile, depositMoney)
 
 app.get('/admin/best-profession', getBestProfession);
+
+app.get('/admin/best-clients', getBestClients);
 
 module.exports = app;

@@ -22,25 +22,17 @@ const payForJob = async (req, res, next) => {
   if (profile.balance < job.price) return res.status(400).send('Not enough balance to pay for the job. Please transfer funds to your balance to proceed with payment.');
 
   try {
-    const paid_job = await sequelize.transaction(async (t) => {
-      console.debug("profile balance before", profile.balance);
-      const updated_client = await Profile.update({
+    await sequelize.transaction(async (t) => {
+      await Profile.update({
         balance: profile.balance - job.price
       }, { where: { id: profile.id }, transaction: t, returning: true });
-      console.debug("profile balance after", updated_client.balance);
 
-      const updated_job = await Job.update({ paid: true, paymentDate: new Date().toISOString() }, { where: { id }, transaction: t, returning: true })
+      await Job.update({ paid: true, paymentDate: new Date().toISOString() }, { where: { id }, transaction: t, returning: true })
 
-      console.debug("contractor balance before", contractor.balance);
-      const updated_contractor = await Profile.update({ balance: contractor.blaance + job.price }, { where: { id: contractor.id }, transaction: t, returning: true });
-      console.debug("contractor balance after", updated_contractor.balance);
-
-      return updated_job;
+      await Profile.update({ balance: contractor.blaance + job.price }, { where: { id: contractor.id }, transaction: t, returning: true });
     });
 
-    console.debug("paid_job", paid_job);
-
-    return res.status(200).send(`Payment has been successfully made for job: ${paid_job.id}.`);
+    return res.status(200).send(`Payment has been successfully made for job`);
   }
   catch (error) {
     console.debug("error", error);
